@@ -1,17 +1,25 @@
-function Question({ question, dispatch }) {
+import Options from './Options';
+import Timer from './Timer';
+
+function Question({ question, dispatch, answer, numQuestions, currentIndex, secondsRemaining }) {
+  const isLastQuestion = currentIndex === numQuestions - 1;
+  const hasAnswered = answer !== null;
+
   return (
     <div>
       <h4>{question.question}</h4>
-      <div className="options">
-        {question.options.map((option, index) => (
+      <Options question={question} dispatch={dispatch} answer={answer} />
+
+      <div className="btn-container">
+        <Timer secondsRemaining={secondsRemaining} />
+        {hasAnswered && (
           <button
-            key={index}
-            className="btn btn-option"
-            onClick={() => dispatch({ type: 'nextQuestion' })}
+            className="btn btn-ui"
+            onClick={() => dispatch({ type: isLastQuestion ? 'finish' : 'nextQuestion' })}
           >
-            {option}
+            {isLastQuestion ? 'Finish' : 'Next'}
           </button>
-        ))}
+        )}
       </div>
     </div>
   );
